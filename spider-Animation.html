@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design circle on every click</title>
+    <style>
+        canvas {
+            border: 1px solid red;
+            display: block;
+            margin: auto;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas1" width="800" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas1');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    const ParticleArray = [];
+    let hue = 0;
+        window.addEventListener('resize',  function(){
+            canvas.width = window.innerWidth;
+             canvas.height = window.innerHeight;
+             
+             
+            
+        });
+
+    
+        const mouse = {
+
+            x : null,
+            y : null,
+           
+        };
+
+        function updateMousePosition(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+            for( let i =0; i<10; i++){
+                ParticleArray.push(new Particle());
+            }
+            
+        }
+        
+        // Event listeners
+        canvas.addEventListener('click' , updateMousePosition);
+        canvas.addEventListener('mousemove', updateMousePosition);
+   
+
+
+ class Particle{
+        constructor(){
+            this.x = mouse.x
+            this.y = mouse.y;
+       
+          this.size = Math.random()* 17 + 1;
+          this.speedX = Math.random() * 3 - 2;
+          this.speedY = Math.random() * 3 - 2;
+          this.color = 'hsl('+ hue +', 100%, 50%)';  // <- Fixed hue at particle creation
+       
+          
+        }
+        update(){
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if(this.size > 0.2) this.size -= 0.1;
+           
+          }
+            draw(){
+                //ctx.fillStyle = '#21b589';
+                ctx.fillStyle = this.color;  // <- This won't update as `hue` changes
+
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0 , Math.PI * 2);
+             
+
+
+                
+                ctx.fill();
+                
+            }
+      }
+      function init(){
+        for( let i = 0 ; i < 100; i++){
+ParticleArray.push(new Particle());
+        }
+      }
+      
+init();
+      function handlePrticles(){
+         for(let i= 0; i<ParticleArray.length; i++){
+            ParticleArray[i].update();
+            ParticleArray[i].draw();
+            if( ParticleArray[i].size <= 0.3){
+            
+                ParticleArray.splice(i , 1);
+                         console.log(ParticleArray.length); 
+                i--;
+            }
+            for(let j= i; j< ParticleArray.length; j++ ){
+                const dx = ParticleArray[i].x - ParticleArray[j].x;
+                const dy = ParticleArray[i].y - ParticleArray[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if(distance < 100){
+                    ctx.beginPath();
+                    ctx.strokeStyle = ParticleArray[i].color;
+                    ctx.lineWidth = ParticleArray[i].size/10;
+                    ctx.moveTo(ParticleArray[i].x , ParticleArray[i].y);
+                    ctx.lineTo(ParticleArray[j].x , ParticleArray[j].y);
+                    ctx.stroke();
+                }
+
+            }
+            
+         }
+
+      }
+ 
+     
+      
+      
+
+        function animate(){
+     ctx.clearRect(0, 0, canvas.width, canvas.height )
+     
+        ctx.fillStyle = 'rgba(0,0,0,0.1)';
+      //   ctx.fillRect(0,0 ,canvas.width, canvas.height);
+         handlePrticles();
+         hue+=0.5;
+
+        requestAnimationFrame(animate);
+          
+          }
+          animate();
+    </script>
+</body>
+</html>
