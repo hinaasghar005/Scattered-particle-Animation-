@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design circle on every click</title>
+    <style>
+        canvas {
+            border: 1px solid  aqua;
+            display: block;
+            margin: auto;
+            border-radius: 5px;
+
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas1" width="800" height="400"></canvas>
+    <script>
+
+
+        window.addEventListener('load' , function(){
+           const canvas = document.getElementById('canvas1');
+           const ctx =  canvas.getContext('2d');
+           canvas.height = window.innerHeight * 0.8;
+           canvas.width = window.innerWidth * 0.8;
+
+           
+
+          
+
+
+ctx.fillStyle = 'green';
+ctx.strokeStyle = 'yellow';
+ctx.lineWidth = 30;
+ctx.lineCap = 'round';
+
+
+let size = 200;
+ctx.save();
+
+
+ctx.translate(canvas.width/2, canvas.height/2);
+
+ctx.scale(1, 1 );
+ctx.rotate(-0.1);
+//ctx.fillRect(0,0, canvas.width, canvas.height);
+ctx.beginPath();
+ctx.moveTo(canvas.width/2, canvas.height/2);
+ctx.lineTo(size,  canvas.height/2);
+ctx.stroke();
+
+
+
+
+
+            
+        })
+    </script>
+</body>
+</html>
